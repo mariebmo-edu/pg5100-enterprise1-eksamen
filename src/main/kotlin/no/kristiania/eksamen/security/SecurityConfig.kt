@@ -31,13 +31,16 @@ class SecurityConfig(
         val authenticationFilter = CustomAuthenticationFilter(authenticationManagerBean())
         authenticationFilter.setFilterProcessesUrl("/api/login")
 
+
         http.csrf().disable()
         http.sessionManagement().disable()
         http.authorizeRequests()
             .antMatchers("/api/login").permitAll()
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/user/**").hasAnyAuthority("USER", "ADMIN")
+            .antMatchers("/api/animal/(?!(new)\$).*").hasAnyAuthority("USER", "ADMIN")
             .antMatchers("/api/authority/**").hasAuthority("ADMIN")
+            .antMatchers("/api/animal/new").hasAuthority("ADMIN")
         http.authorizeHttpRequests().anyRequest().authenticated()
         http.addFilter(authenticationFilter)
         http.addFilterBefore(CustomAuthorizationFilter(), CustomAuthenticationFilter::class.java)

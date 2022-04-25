@@ -10,7 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 class AuthController(@Autowired private val userService: UserService) {
 
     @GetMapping("/authority/all")
@@ -18,12 +18,12 @@ class AuthController(@Autowired private val userService: UserService) {
         return ResponseEntity.ok().body(userService.getAuthorities())
     }
 
-    @GetMapping("/user/all")
+    @GetMapping("/all")
     fun getUsers(): ResponseEntity<List<UserEntity>>{
         return ResponseEntity.ok().body(userService.getUsers())
     }
 
-    @PostMapping("/user")
+    @PostMapping("/new")
     fun registerUser(@RequestBody newUserInfo : NewUserInfo) : ResponseEntity<UserEntity>{
         val createdUser = userService.registerUser(newUserInfo)
         val uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user").toUriString())

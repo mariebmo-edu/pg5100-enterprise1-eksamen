@@ -34,7 +34,7 @@ class UserService(@Autowired private val userRepo: UserRepo, @Autowired private 
         return authorityRepo.findByName(name)
     }
 
-    fun getUsers(): List<UserEntity> {
+    fun getUsers(): MutableList<UserEntity> {
         return userRepo.findAll()
     }
 
