@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface AuthorityRepo: JpaRepository<AuthorityEntity, Long> {
 
-    fun findByName(name: String) : AuthorityEntity?
+    fun findByName(name: String) : AuthorityEntity
 }
