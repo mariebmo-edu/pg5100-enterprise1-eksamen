@@ -31,6 +31,4 @@ class AuthController(@Autowired private val userService: UserService) {
     }
 }
 
-data class NewUserInfo(val email: String, val password: String){
-
-}
+data class NewUserInfo(val email: String, val password: String)

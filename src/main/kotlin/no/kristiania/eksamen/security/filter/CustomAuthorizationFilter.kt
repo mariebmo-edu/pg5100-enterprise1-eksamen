@@ -1,8 +1,6 @@
 package no.kristiania.eksamen.security.filter
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.kristiania.eksamen.security.jwt.JwtUtil
-import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
@@ -17,7 +15,7 @@ class CustomAuthorizationFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val token = request.cookies.firstOrNull { it.name == "access_token" }?.value
+        val token = request.cookies?.first { it.name == "access_token" }?.value
         when {
             token.isNullOrEmpty() -> filterChain.doFilter(request, response)
             request.servletPath.contains("/api/login") -> filterChain.doFilter(request, response)
@@ -34,7 +32,6 @@ class CustomAuthorizationFilter : OncePerRequestFilter() {
                 } catch (e: Exception){
                     logger.error("Authentication error: " + e.message)
                 }
-
             }
         }
     }
