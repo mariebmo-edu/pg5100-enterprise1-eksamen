@@ -9,7 +9,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
 
 @RestController
-@RequestMapping("/api/animal")
+@RequestMapping("/api/shelter")
 class AnimalController(@Autowired private val animalService: AnimalService) {
 
     @GetMapping("/all")
