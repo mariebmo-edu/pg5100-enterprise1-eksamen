@@ -8,7 +8,7 @@ import java.util.*
 
 object JwtUtil {
 
-    private const val SECRET = "do_not_store_secrets_in_source_code"
+    private const val SECRET = "i_am_totally_not_storing_a_secret_here_promise_look_in_the_other_house"
 
     private val algorithm = Algorithm.HMAC256(SECRET)
 
