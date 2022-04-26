@@ -56,10 +56,10 @@ class AuthorityControllerUnitTest {
 
     @Test
     fun shouldGrantAuthorityTest(){
-        every { userService.grantAuthority(any(), anyLongVararg()[0]) } answers {true}
+        every { userService.grantAuthority(any(), 2) } answers {true}
 
         mockMvc.perform(
-            MockMvcRequestBuilders.patch("/api/authority/1")
+            MockMvcRequestBuilders.patch("/api/authority/grant/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"authorityId\":2}")
                 .characterEncoding("utf-8")

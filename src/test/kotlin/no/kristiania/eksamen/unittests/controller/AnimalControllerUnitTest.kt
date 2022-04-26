@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import java.security.InvalidParameterException
 
 @WebMvcTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -133,27 +134,11 @@ class AnimalControllerUnitTest {
         }
 
         mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/shelter/1")
+            MockMvcRequestBuilders.put("/api/shelter/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jacksonObjectMapper().writeValueAsString(DummyData().getTestAnimalDtoForUpdateList()[0]))
                 .characterEncoding("utf-8"))
             .andExpect { ResponseEntity.status(HttpStatus.OK) }
-            .andReturn()
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/shelter/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jacksonObjectMapper().writeValueAsString(DummyData().getTestAnimalDtoForUpdateList()[0]))
-                .characterEncoding("utf-8"))
-            .andExpect { ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) }
-            .andReturn()
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/shelter/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jacksonObjectMapper().writeValueAsString(null))
-                .characterEncoding("utf-8"))
-            .andExpect { ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) }
             .andReturn()
     }
 
@@ -184,7 +169,7 @@ class AnimalControllerUnitTest {
         }
 
         mockMvc.perform(
-            MockMvcRequestBuilders.delete("/1")).andExpect { ResponseEntity.status(HttpStatus.OK) }.andReturn()
+            MockMvcRequestBuilders.delete("/api/shelter/1")).andExpect { ResponseEntity.status(HttpStatus.OK) }.andReturn()
 
     }
 }
