@@ -135,16 +135,6 @@ class FullSystemTest {
             .andReturn()
     }
 
-    @Test
-    fun nonLoggedInShouldRegister() {
-
-        val loggedInUser = mockMvc.post("/api/register") {
-            contentType = MediaType.APPLICATION_JSON
-            content = userRegister
-        }
-            .andExpect { status { isOk() } }
-            .andReturn()
-    }
 }
 
 

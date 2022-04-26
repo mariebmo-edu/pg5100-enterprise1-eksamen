@@ -1,15 +1,11 @@
-package no.kristiania.eksamen.integrationtests
+package no.kristiania.eksamen.integrationtests.database
 
-import io.mockk.mockk
 import no.kristiania.eksamen.dto.UserDto
-import no.kristiania.eksamen.service.AnimalService
 import no.kristiania.eksamen.service.UserService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 
@@ -23,7 +19,7 @@ class UserDatabaseIntegrationTests(@Autowired private val userService: UserServi
     @Test
     fun shouldGetUsers(){
         val result = userService.getUsers()
-        assert(result.size == 3)
+        assert(result.size > 2)
     }
 
     @Test
@@ -37,5 +33,23 @@ class UserDatabaseIntegrationTests(@Autowired private val userService: UserServi
         val foundUser = userService.loadUserByUsername("testuser1@test.com")
 
         assert(foundUser.username == createdUser?.email)
+    }
+
+    @Test
+    fun shouldDeleteUser(){
+
+        assert(!userService.deleteUser(1))
+        assert(userService.deleteUser(3))
+
+    }
+
+    @Test
+    fun shouldUpdateUser(){
+        userService.grantAuthority(2, 1)
+
+        val user = userService.getUserById(2)
+        val authority = userService.getAuthority(1)
+
+        assert(user!!.authorities.contains(authority))
     }
 }

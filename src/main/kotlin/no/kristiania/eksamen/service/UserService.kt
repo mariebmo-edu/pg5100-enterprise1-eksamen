@@ -33,11 +33,19 @@ class UserService(@Autowired private val userRepo: UserRepo, @Autowired private 
     }
 
     fun getAuthority(name: String): AuthorityEntity? {
-        return authorityRepo?.findByName(name)
+        return authorityRepo.findByName(name)
+    }
+
+    fun getAuthority(id: Long): AuthorityEntity? {
+        return authorityRepo.getById(id)
     }
 
     fun getUsers(): MutableList<UserEntity> {
         return userRepo.findAll()
+    }
+
+    fun getUserById(id : Long) : UserEntity?{
+        return userRepo.getById(id)
     }
 
     fun registerUser(userDto: UserDto): UserEntity? {

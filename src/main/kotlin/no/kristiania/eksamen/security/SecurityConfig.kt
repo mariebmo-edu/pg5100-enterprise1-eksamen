@@ -37,7 +37,7 @@ class SecurityConfig(
         http.sessionManagement().disable()
         http.authorizeRequests()
             .antMatchers("/api/login").permitAll()
-            .antMatchers("/api/user/register").permitAll()
+            .antMatchers("/api/register").permitAll()
             .antMatchers(HttpMethod.GET, "/api/shelter/**").hasAnyAuthority("USER", "EMPLOYEE", "ADMIN")
             .antMatchers("/api/user/**").hasAnyAuthority("EMPLOYEE", "ADMIN")
             .antMatchers("/api/shelter/**").hasAnyAuthority("EMPLOYEE", "ADMIN")
