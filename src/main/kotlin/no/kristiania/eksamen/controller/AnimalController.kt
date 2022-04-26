@@ -53,16 +53,16 @@ class AnimalController(@Autowired private val animalService: AnimalService) {
     }
 
     @GetMapping("/{id}")
-    fun getAnimalByID(@PathVariable id: Long?): ResponseEntity<AnimalEntity>? {
+    fun getAnimalByID(@PathVariable id: Long?): ResponseEntity<Any>? {
         id?.let {
             animalService.getAnimalById(id)?.let {
                 return ResponseEntity.ok().body(it)
             }
-        }.run { throw InvalidParameterException() }
+        }.run { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Animal Not Found") }
     }
 
     @PostMapping("")
-    fun registerAnimal(@RequestBody animalDto: AnimalDto?): ResponseEntity<AnimalEntity>? {
+    fun registerAnimal(@RequestBody animalDto: AnimalDto?): ResponseEntity<Any>? {
 
         when (animalDto) {
             null -> throw InvalidParameterException()
@@ -72,7 +72,7 @@ class AnimalController(@Autowired private val animalService: AnimalService) {
                         ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/shelter/").toUriString()
                     )
                     return ResponseEntity.created(uri).body(it)
-                }.run { throw InvalidParameterException() }
+                }.run { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request") }
             }
         }
     }
@@ -81,28 +81,28 @@ class AnimalController(@Autowired private val animalService: AnimalService) {
     fun updateAnimal(
         @PathVariable id: Long?,
         @RequestBody animalDto: AnimalDtoForUpdate?
-    ): ResponseEntity<AnimalEntity>? {
+    ): ResponseEntity<Any>? {
         when {
             id == null -> throw InvalidParameterException()
             animalDto == null -> throw InvalidParameterException()
             else -> {
                 animalService.updateAnimal(id, animalDto)?.let {
                     return ResponseEntity.ok().body(it)
-                }.run { throw InvalidParameterException() }
+                }.run {  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request") }
             }
         }
     }
 
     @PatchMapping("/{id}/status")
-    fun updateAnimalStatus(@PathVariable id: Long?, @RequestBody statusId: JsonNode): ResponseEntity<AnimalEntity>? {
+    fun updateAnimalStatus(@PathVariable id: Long?, @RequestBody statusId: JsonNode): ResponseEntity<Any>? {
         id?.let {
             if (!animalService.updateAnimalStatus(
                     it,
                     statusId.get("statusId").asLong()
                 )
-            ) throw InvalidParameterException()
+            ) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request")
             return ResponseEntity.ok().body(animalService.getAnimalById(id))
-        }.run { throw InvalidParameterException() }
+        }.run {  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request") }
     }
 
     @DeleteMapping("/{id}")
@@ -110,6 +110,6 @@ class AnimalController(@Autowired private val animalService: AnimalService) {
         id?.let {
             if (!animalService.deleteAnimal(it)) throw InvalidParameterException()
             return ResponseEntity.ok().body("Deleted Successfully")
-        }.run { throw InvalidParameterException() }
+        }.run { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request") }
     }
 }
