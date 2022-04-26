@@ -40,6 +40,11 @@ class FullSystemTest {
             "    \"password\":\"viking\"\n" +
             "}"
 
+    private val userRegister = "{\n" +
+            "    \"email\":\"please@work.com\",\n" +
+            "    \"password\":\"no\"\n" +
+            "}"
+
     @Test
     fun adminShouldAddEmployerTest() {
 
@@ -127,6 +132,17 @@ class FullSystemTest {
                 .characterEncoding("utf-8")
         )
             .andExpect { status().isUnauthorized }
+            .andReturn()
+    }
+
+    @Test
+    fun nonLoggedInShouldRegister() {
+
+        val loggedInUser = mockMvc.post("/api/register") {
+            contentType = MediaType.APPLICATION_JSON
+            content = userRegister
+        }
+            .andExpect { status { isOk() } }
             .andReturn()
     }
 }

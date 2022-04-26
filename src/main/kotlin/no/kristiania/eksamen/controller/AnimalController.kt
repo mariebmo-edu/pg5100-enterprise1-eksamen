@@ -23,33 +23,33 @@ class AnimalController(@Autowired private val animalService: AnimalService) {
     }
 
     @GetMapping("/status/{statusId}")
-    fun getAnimalsByStatusCode(@PathVariable statusId: Long?): ResponseEntity<List<AnimalEntity>> {
+    fun getAnimalsByStatusCode(@PathVariable statusId: Long?): ResponseEntity<Any> {
 
         statusId?.let {
             animalService.getAnimalsByStatus(statusId)?.let {
                 return ResponseEntity.ok().body(it)
-            }
-        }.run { throw InvalidParameterException() }
+            }.run{return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found")}
+        }.run { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request") }
     }
 
     @GetMapping("/breed/{breed}")
-    fun getAnimalsByBreed(@PathVariable breed: String?): ResponseEntity<List<AnimalEntity>>? {
+    fun getAnimalsByBreed(@PathVariable breed: String?): ResponseEntity<Any>? {
 
         breed?.let {
             animalService.getAnimalsByBreed(breed)?.let {
                 return ResponseEntity.ok().body(it)
-            }
-        }.run { throw InvalidParameterException() }
+            }.run{return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found")}
+        }.run { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request") }
     }
 
     @GetMapping("/name/{name}")
-    fun getAnimalsByName(@PathVariable name: String?): ResponseEntity<List<AnimalEntity>>? {
+    fun getAnimalsByName(@PathVariable name: String?): ResponseEntity<Any>? {
 
         name?.let {
             animalService.getAnimalsByName(name)?.let {
                 return ResponseEntity.ok().body(it)
-            }
-        }.run { throw InvalidParameterException() }
+            }.run{return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found")}
+        }.run { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request") }
     }
 
     @GetMapping("/{id}")
@@ -57,22 +57,22 @@ class AnimalController(@Autowired private val animalService: AnimalService) {
         id?.let {
             animalService.getAnimalById(id)?.let {
                 return ResponseEntity.ok().body(it)
-            }
-        }.run { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Animal Not Found") }
+            }.run{return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found")}
+        }.run { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not Found") }
     }
 
     @PostMapping("")
     fun registerAnimal(@RequestBody animalDto: AnimalDto?): ResponseEntity<Any>? {
 
         when (animalDto) {
-            null -> throw InvalidParameterException()
+            null -> return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request")
             else -> {
                 animalService.registerAnimal(animalDto)?.let {
                     val uri = URI.create(
                         ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/shelter/").toUriString()
                     )
                     return ResponseEntity.created(uri).body(it)
-                }.run { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request") }
+                }.run { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found") }
             }
         }
     }
@@ -83,12 +83,12 @@ class AnimalController(@Autowired private val animalService: AnimalService) {
         @RequestBody animalDto: AnimalDtoForUpdate?
     ): ResponseEntity<Any>? {
         when {
-            id == null -> throw InvalidParameterException()
-            animalDto == null -> throw InvalidParameterException()
+            id == null -> return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request")
+            animalDto == null -> return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request")
             else -> {
                 animalService.updateAnimal(id, animalDto)?.let {
                     return ResponseEntity.ok().body(it)
-                }.run {  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request") }
+                }.run {  return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found") }
             }
         }
     }
@@ -100,9 +100,9 @@ class AnimalController(@Autowired private val animalService: AnimalService) {
                     it,
                     statusId.get("statusId").asLong()
                 )
-            ) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request")
+            ) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found")
             return ResponseEntity.ok().body(animalService.getAnimalById(id))
-        }.run {  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request") }
+        }.run { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request") }
     }
 
     @DeleteMapping("/{id}")
