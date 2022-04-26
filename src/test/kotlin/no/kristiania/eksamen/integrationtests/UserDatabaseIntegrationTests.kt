@@ -1,7 +1,7 @@
 package no.kristiania.eksamen.integrationtests
 
 import io.mockk.mockk
-import no.kristiania.eksamen.controller.NewUserInfo
+import no.kristiania.eksamen.dto.UserDto
 import no.kristiania.eksamen.service.AnimalService
 import no.kristiania.eksamen.service.UserService
 import org.junit.jupiter.api.Test
@@ -17,25 +17,25 @@ import org.springframework.test.context.ActiveProfiles
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
 @Import(UserService::class)
-class DatabaseIntegrationTests(@Autowired private val userService: UserService, ) {
+class UserDatabaseIntegrationTests(@Autowired private val userService: UserService, ) {
 
 
     @Test
     fun shouldGetUsers(){
         val result = userService.getUsers()
-        assert(result.size == 2)
+        assert(result.size == 3)
     }
 
     @Test
     fun shouldRegisterAndFindUser(){
 
-        val newUserInfo = NewUserInfo("testuser1@test.com", "password1")
+        val newUserInfo = UserDto("testuser1@test.com", "password1")
         val createdUser = userService.registerUser(newUserInfo)
 
-        assert(createdUser.email == "testuser1@test.com")
+        assert(createdUser?.email == "testuser1@test.com")
 
         val foundUser = userService.loadUserByUsername("testuser1@test.com")
 
-        assert(foundUser.username == createdUser.email)
+        assert(foundUser.username == createdUser?.email)
     }
 }

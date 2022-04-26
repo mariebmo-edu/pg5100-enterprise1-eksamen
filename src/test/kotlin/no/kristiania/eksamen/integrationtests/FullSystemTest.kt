@@ -35,7 +35,7 @@ class FullSystemTest {
 
         val adminCookie = loggedInUser.response.getCookie("access_token")
 
-        mockMvc.get("/api/shelter/all"){
+        mockMvc.get("/api/shelter/"){
             adminCookie?.let { cookie(it) }
         }
             .andExpect { status { isOk() } }

@@ -1,4 +1,4 @@
-package no.kristiania.eksamen.unittests
+package no.kristiania.eksamen.unittests.controller
 
 import io.mockk.every
 import io.mockk.mockk
@@ -13,11 +13,10 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
-import javax.annotation.PostConstruct
 
 @WebMvcTest
 @AutoConfigureMockMvc(addFilters = false)
-class AuthControllerUnitTest {
+class UserControllerUnitTest {
 
 
     @TestConfiguration

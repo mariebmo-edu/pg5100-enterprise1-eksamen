@@ -12,8 +12,8 @@ create table authorities(
 );
 
 create table users_authorities(
-    user_id bigint,
-    authority_id bigint
+    authority_id bigint,
+    user_id bigint
 );
 
 create table status(

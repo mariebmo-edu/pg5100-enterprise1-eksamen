@@ -1,6 +1,9 @@
 package no.kristiania.eksamen.security.filter
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.kristiania.eksamen.security.jwt.JwtUtil
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
@@ -31,6 +34,11 @@ class CustomAuthorizationFilter : OncePerRequestFilter() {
                     filterChain.doFilter(request, response)
                 } catch (e: Exception){
                     logger.error("Authentication error: " + e.message)
+                    val error = mapOf("ERROR_MESSAGE" to e.message)
+                    response.contentType = APPLICATION_JSON_VALUE
+                    response.status = FORBIDDEN.value()
+                    jacksonObjectMapper().writeValue(response.outputStream, error)
+
                 }
             }
         }

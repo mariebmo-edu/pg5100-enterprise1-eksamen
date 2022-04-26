@@ -1,5 +1,6 @@
 package no.kristiania.eksamen.controller
 
+import no.kristiania.eksamen.dto.UserDto
 import no.kristiania.eksamen.model.AuthorityEntity
 import no.kristiania.eksamen.model.UserEntity
 import no.kristiania.eksamen.service.UserService
@@ -8,27 +9,28 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
+import java.security.InvalidParameterException
 
 @RestController
 @RequestMapping("/api/user")
-class AuthController(@Autowired private val userService: UserService) {
-
-    @GetMapping("/authority/all")
-    fun getAuthorities(): ResponseEntity<List<AuthorityEntity>>{
-        return ResponseEntity.ok().body(userService.getAuthorities())
-    }
+class UserController(@Autowired private val userService: UserService) {
 
     @GetMapping("/all")
     fun getUsers(): ResponseEntity<List<UserEntity>>{
         return ResponseEntity.ok().body(userService.getUsers())
     }
 
-    @PostMapping("/new")
-    fun registerUser(@RequestBody newUserInfo : NewUserInfo) : ResponseEntity<UserEntity>{
-        val createdUser = userService.registerUser(newUserInfo)
+    @PostMapping("/")
+    fun registerUser(@RequestBody userDto: UserDto) : ResponseEntity<UserEntity>{
+        val createdUser = userService.registerUser(userDto)
         val uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user").toUriString())
         return ResponseEntity.created(uri).body(createdUser)
     }
-}
 
-data class NewUserInfo(val email: String, val password: String)
+    @DeleteMapping("/{id}")
+    fun deleteUser(@PathVariable id: Long?){
+        id?.let {
+            if(!userService.deleteUser(it)) throw InvalidParameterException()
+        }
+    }
+}

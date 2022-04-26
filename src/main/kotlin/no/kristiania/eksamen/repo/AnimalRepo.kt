@@ -7,7 +7,7 @@ interface AnimalRepo : JpaRepository<AnimalEntity, Long> {
 
     fun findByStatusId(statusId : Long) : List<AnimalEntity>
 
-    fun findByName(name: String) : List<AnimalEntity>
+    fun findByNameIgnoreCase(name: String) : List<AnimalEntity>
 
-    fun findByBreed(breed: String) : List<AnimalEntity>
+    fun findByBreedIgnoreCase(breed: String) : List<AnimalEntity>
 }

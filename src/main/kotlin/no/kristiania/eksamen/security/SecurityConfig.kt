@@ -6,6 +6,7 @@ import no.kristiania.eksamen.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -37,8 +38,10 @@ class SecurityConfig(
         http.authorizeRequests()
             .antMatchers("/api/login").permitAll()
             .antMatchers("/api/register").permitAll()
-            .antMatchers("/api/user/**").hasAnyAuthority("USER", "ADMIN")
-            .antMatchers("/api/animal/(?!(new)\$).*").hasAnyAuthority("USER", "ADMIN")
+            .antMatchers("/api/shelter/all/**").hasAnyAuthority("USER", "EMPLOYEE", "ADMIN")
+            .antMatchers(HttpMethod.GET, "/api/shelter/**").hasAnyAuthority("USER", "EMPLOYEE", "ADMIN")
+            .antMatchers("/api/user/**").hasAnyAuthority("EMPLOYEE", "ADMIN")
+            .antMatchers("/api/shelter/**").hasAnyAuthority("EMPLOYEE", "ADMIN")
             .antMatchers("/api/authority/**").hasAuthority("ADMIN")
             .antMatchers("/api/animal/new").hasAuthority("ADMIN")
         http.authorizeHttpRequests().anyRequest().authenticated()
