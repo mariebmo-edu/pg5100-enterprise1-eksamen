@@ -17,7 +17,7 @@ import java.security.InvalidParameterException
 @RequestMapping("/api/shelter")
 class AnimalController(@Autowired private val animalService: AnimalService) {
 
-    @GetMapping("/")
+    @GetMapping("")
     fun getAnimals(): ResponseEntity<List<AnimalEntity>> {
         return ResponseEntity.ok().body(animalService.getAnimals())
     }
@@ -61,7 +61,7 @@ class AnimalController(@Autowired private val animalService: AnimalService) {
         }.run { throw InvalidParameterException() }
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     fun registerAnimal(@RequestBody animalDto: AnimalDto?): ResponseEntity<AnimalEntity>? {
 
         when (animalDto) {

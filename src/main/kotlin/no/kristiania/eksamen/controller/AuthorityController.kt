@@ -16,7 +16,7 @@ import java.security.InvalidParameterException
 @RequestMapping("/api/authority")
 class AuthorityController(@Autowired private val userService: UserService) {
 
-    @GetMapping("/all")
+    @GetMapping("")
     fun getAuthorities(): ResponseEntity<List<AuthorityEntity>> {
         return ResponseEntity.ok().body(userService.getAuthorities())
     }
