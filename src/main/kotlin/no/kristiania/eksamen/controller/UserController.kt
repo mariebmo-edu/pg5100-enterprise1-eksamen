@@ -21,7 +21,7 @@ class UserController(@Autowired private val userService: UserService) {
         return ResponseEntity.ok().body(userService.getUsers())
     }
 
-    @PostMapping("/")
+    @PostMapping("/register")
     fun registerUser(@RequestBody userDto: UserDto?) : ResponseEntity<Any>{
         return when(userDto){
             null -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request")

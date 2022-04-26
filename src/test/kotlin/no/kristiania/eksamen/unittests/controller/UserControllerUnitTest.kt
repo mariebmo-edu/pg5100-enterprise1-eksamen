@@ -68,7 +68,7 @@ class UserControllerUnitTest {
         }
 
         mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/user/")
+            MockMvcRequestBuilders.post("/api/user/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jacksonObjectMapper().writeValueAsString(DummyData().getTestUserDtoList()[0]))
                 .characterEncoding("utf-8"))
